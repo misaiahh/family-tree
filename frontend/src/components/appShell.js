@@ -72,8 +72,7 @@ export class AppShell extends HTMLElement {
       </style>
 
       <nav>
-        <a href="#home" class="brand">Family Tree</a>
-        <a href="#home" data-nav>Home</a>
+        <a href="#tree" class="brand">Family Tree</a>
         <a href="#tree" data-nav>Tree</a>
       </nav>
 
@@ -88,7 +87,7 @@ export class AppShell extends HTMLElement {
   }
 
   #updateActiveNav() {
-    const current = window.location.hash.slice(1) || 'home';
+    const current = window.location.hash.slice(1) || 'tree';
     this.shadowRoot.querySelectorAll('[data-nav]').forEach((link) => {
       const href = link.getAttribute('href').slice(1);
       link.classList.toggle('active', href === current.split('/')[0]);
