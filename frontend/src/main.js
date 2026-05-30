@@ -1,14 +1,18 @@
 import { Router } from './utils/router.js';
 import './components/appShell.js';
-import './pages/homePage.js';
-import './pages/treePage.js';
+import './tree/tree.js';
 import './styles/global.css';
 
-// Register routes: path → custom element tag name
-const router = new Router(document.querySelector('main'));
-router
-  .route('home', 'home-page')
-  .route('tree', 'tree-page');
+// Wait for custom elements to be upgraded, then get the main container
+// from inside app-shell's shadow DOM.
+customElements.whenDefined('app-shell').then(() => {
+  const appShell = document.querySelector('app-shell');
+  const main = appShell?.shadowRoot?.querySelector('main');
 
-// Boot
-router.start();
+  // Register routes: path → custom element tag name
+  const router = new Router(main);
+  router.route('tree', 'tree-view');
+
+  // Boot — default to tree view
+  router.start();
+});

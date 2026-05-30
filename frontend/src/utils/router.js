@@ -28,14 +28,19 @@ export class Router {
 
   /** Get the current active path (without '#'). */
   get currentPath() {
-    return (window.location.hash.slice(1) || 'home').split('/')[0];
+    return (window.location.hash.slice(1) || 'tree').split('/')[0];
   }
 
   /** Start listening for hash changes and perform initial navigation. */
   start() {
-    // If no hash is set, default to home
+    if (!this.#container) {
+      console.warn('Router: container element not found — navigation disabled');
+      return;
+    }
+
+    // If no hash is set, default to tree
     if (!window.location.hash) {
-      window.location.hash = 'home';
+      window.location.hash = 'tree';
       return;
     }
     this.#navigate();

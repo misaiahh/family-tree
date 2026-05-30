@@ -1,0 +1,19 @@
+[package]
+name = "family-tree-backend"
+version = "0.1.0"
+edition = "2021"
+description = "Backend API for the family tree application"
+
+[dependencies]
+actix-web = "4.13"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite", "chrono"] }
+chrono = { version = "0.4", features = ["serde"] }
+log = "0.4"
+env_logger = "0.11"
+thiserror = "2"
+
+[dev-dependencies]
+actix-rt = "2"
