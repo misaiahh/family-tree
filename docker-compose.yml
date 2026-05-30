@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      # Persist SQLite data across container restarts
+      - sqlite-data:/data
+    environment:
+      - DATABASE_URL=/data/family_tree.db
+      - HOST=0.0.0.0
+      - PORT=8080
+    restart: unless-stopped
+
+volumes:
+  sqlite-data:

@@ -1,23 +1,19 @@
 /**
  * API client for family tree data.
- * Currently returns mock data. Swap the BASE_URL to connect to a real backend.
+ * Connects to the Rust backend via /api (proxied in dev, direct in prod).
  */
-import { defaultFamily } from './models.js';
-
-const BASE_URL = ''; // Set to '/api' when backend is running
+const BASE_URL = '';
 
 /**
  * Fetch the family tree data.
  * @returns {Promise<import('./models.js').Family>}
  */
 export async function fetchFamily() {
-  // When the backend is ready, replace with:
-  //   const res = await fetch(`${BASE_URL}/api/family`);
-  //   if (!res.ok) throw new Error(`API error: ${res.status}`);
-  //   return res.json();
-
-  // Mock: return local data
-  return Promise.resolve(defaultFamily);
+  const res = await fetch(`${BASE_URL}/api/family`);
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  const json = await res.json();
+  if (!json.success) throw new Error(json.error || 'API error');
+  return json.data;
 }
 
 /**
@@ -26,18 +22,11 @@ export async function fetchFamily() {
  * @returns {Promise<import('./models.js').Person | null>}
  */
 export async function fetchPerson(id) {
-  // When the backend is ready:
-  //   const res = await fetch(`${BASE_URL}/api/family/person/${id}`);
-  //   if (!res.ok) return null;
-  //   return res.json();
-
-  const family = defaultFamily;
-  const person = [
-    ...family.parents,
-    ...family.children,
-  ].find((p) => p.id === id);
-
-  return person || null;
+  const res = await fetch(`${BASE_URL}/api/family/person/${id}`);
+  if (!res.ok) return null;
+  const json = await res.json();
+  if (!json.success) return null;
+  return json.data;
 }
 
 /**
@@ -46,10 +35,8 @@ export async function fetchPerson(id) {
  */
 export async function isBackendAvailable() {
   try {
-    // When the backend is ready:
-    //   const res = await fetch(`${BASE_URL}/api/health`);
-    //   return res.ok;
-    return false; // No backend yet — use mock data
+    const res = await fetch(`${BASE_URL}/api/health`);
+    return res.ok;
   } catch {
     return false;
   }

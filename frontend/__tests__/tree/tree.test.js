@@ -1,6 +1,29 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import '../../src/tree/tree.js';
 import repository from '../../src/tree/repository.js';
+
+const mockPeople = [
+  { id: 'micky', name: 'Micky', role: 'Dad', birth_year: 1985, death_year: null, photo: null, bio: null, notes: null },
+  { id: 'jen', name: 'Jen', role: 'Mom', birth_year: 1987, death_year: null, photo: null, bio: null, notes: null },
+  { id: 'olivia', name: 'Olivia', role: 'Daughter', birth_year: 2010, death_year: null, photo: null, bio: null, notes: null },
+  { id: 'olenna', name: 'Olenna', role: 'Daughter', birth_year: 2012, death_year: null, photo: null, bio: null, notes: null },
+];
+
+const mockFamily = {
+  parents: [mockPeople[0], mockPeople[1]],
+  children: [mockPeople[2], mockPeople[3]],
+};
+
+beforeEach(() => {
+  global.fetch = vi.fn().mockResolvedValue({
+    ok: true,
+    json: () => Promise.resolve({ success: true, data: mockFamily }),
+  });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('Tree', () => {
   let tree;
